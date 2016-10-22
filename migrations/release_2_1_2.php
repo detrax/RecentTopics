@@ -36,6 +36,37 @@ class release_2_1_2 extends \phpbb\db\migration\migration
 		);
 
 	}
-
+	
+	public function update_schema()
+	{
+		// for each style defined in this table you can define a custom display setting.
+		// the user can still choose the block display mode in the ucp if permission allows it.
+		return array(
+			'add_tables' => array(
+				$this->table_prefix . 'rt_config_style' => array(
+					'COLUMNS' => array(
+						'rt_id' 			=> array('UINT', NULL, 'auto_increment'),
+						'style_id' 			=> array('UINT', 0),
+						'style_name' 		=> array('VCHAR', ''),
+						'display'			=> array('VCHAR', ''),
+					),
+					'PRIMARY_KEY'	=> 'rt_id',
+					'KEYS'            => array(
+						'user_id'    => array('UNIQUE', 'style_id'),
+					),
+				),
+			),
+		);
+	}
+	
+	public function revert_schema()
+	{
+		return array(
+			'drop_tables' => array(
+				$this->table_prefix . 'rt_config_style',
+			),
+		);
+	}
+	
 
 }
